@@ -22,9 +22,14 @@ public class ProductRestController {
         return productService.save(product);
     }
 
+    @PostMapping("saveAll")
+    public List<Product> saveAll(@Valid @RequestBody List<Product> products) {
+        return productService.saveAll(products);
+    }
+
     @GetMapping("list")
     public List<Product> list() {
         return productService.findAll();
     }
-    
+
 }
