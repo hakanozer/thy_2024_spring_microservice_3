@@ -23,8 +23,8 @@ public class AddressRestController {
     }
 
     @GetMapping("list")
-    public List<AddressJoinCity> list() {
-        return addressService.findAll();
+    public List<AddressJoinCity> list(@RequestParam(defaultValue = "0") int cid) {
+        return addressService.findAll(cid);
     }
 
 }

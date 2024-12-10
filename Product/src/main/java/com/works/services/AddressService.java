@@ -19,8 +19,8 @@ public class AddressService {
         return addressRepository.save(address);
     }
 
-    public List<AddressJoinCity> findAll() {
-        return addressRepository.joinAddress();
+    public List<AddressJoinCity> findAll(int cid) {
+        return addressRepository.joinAddress(cid);
     }
 
 }
