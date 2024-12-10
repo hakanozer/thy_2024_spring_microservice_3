@@ -32,8 +32,9 @@ public class ProductService {
         return productRepository.findAll(pageable);
     }
 
-    public List<Product> search(String q) {
-        List<Product> productList = productRepository.findByTitleContainsOrDescriptionContainsAllIgnoreCase(q,q);
+    public Page<Product> search(String q, int pageNumber) {
+        Pageable pageable = PageRequest.of(pageNumber, 10);
+        Page<Product> productList = productRepository.findByTitleContainsOrDescriptionContainsAllIgnoreCase(q,q, pageable);
         return productList;
     }
 
