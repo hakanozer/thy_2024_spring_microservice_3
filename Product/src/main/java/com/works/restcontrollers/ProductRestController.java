@@ -4,6 +4,7 @@ import com.works.entities.Product;
 import com.works.services.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,8 +29,8 @@ public class ProductRestController {
     }
 
     @GetMapping("list")
-    public List<Product> list() {
-        return productService.findAll();
+    public Page<Product> list(@RequestParam(defaultValue = "0") int pageNumber) {
+        return productService.findAll(pageNumber);
     }
 
 }

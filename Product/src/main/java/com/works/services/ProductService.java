@@ -2,6 +2,9 @@ package com.works.services;
 
 import com.works.entities.Product;
 import com.works.repositories.ProductRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,8 +26,9 @@ public class ProductService {
         return productRepository.saveAll(productList);
     }
 
-    public List<Product> findAll() {
-        return productRepository.findAll();
+    public Page<Product> findAll(int pageNumber) {
+        Pageable pageable = PageRequest.of(pageNumber, 10);
+        return productRepository.findAll(pageable);
     }
 
 
