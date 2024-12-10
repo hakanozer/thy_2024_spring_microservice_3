@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -29,6 +30,11 @@ public class ProductService {
     public Page<Product> findAll(int pageNumber) {
         Pageable pageable = PageRequest.of(pageNumber, 10);
         return productRepository.findAll(pageable);
+    }
+
+    public List<Product> search(String q) {
+        List<Product> productList = productRepository.findByTitleContainsOrDescriptionContainsAllIgnoreCase(q,q);
+        return productList;
     }
 
 

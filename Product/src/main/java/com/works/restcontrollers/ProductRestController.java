@@ -33,4 +33,9 @@ public class ProductRestController {
         return productService.findAll(pageNumber);
     }
 
+    @GetMapping("search")
+    public List<Product> search(@RequestParam(defaultValue = "") String q) {
+        return productService.search(q);
+    }
+
 }
