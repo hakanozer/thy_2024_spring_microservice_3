@@ -18,3 +18,9 @@ public class SecurityConfig {
     }
 
 }
+
+/*
+ali01 -> product,
+veli01 -> customer,
+zehra01 -> product, customer
+ */
