@@ -3,6 +3,8 @@ package com.works;
 import com.works.models.Comment;
 import com.works.models.ProductModel;
 import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,10 +25,15 @@ public class CustomerRestController {
     final IProduct iProduct;
     final DiscoveryClient discoveryClient;
     final IPlaceHolder iPlaceHolder;
-    public CustomerRestController(IProduct iProduct, DiscoveryClient discoveryClient, IPlaceHolder iPlaceHolder) {
+    final CircuitBreakerFactory circuitBreakerFactory;
+    final CircuitBreakerFactory globalCustomConfiguration;
+
+    public CustomerRestController(IProduct iProduct, DiscoveryClient discoveryClient, IPlaceHolder iPlaceHolder, CircuitBreakerFactory circuitBreakerFactory, CircuitBreakerFactory globalCustomConfiguration) {
         this.iProduct = iProduct;
         this.discoveryClient = discoveryClient;
         this.iPlaceHolder = iPlaceHolder;
+        this.circuitBreakerFactory = circuitBreakerFactory;
+        this.globalCustomConfiguration = globalCustomConfiguration;
     }
 
     @GetMapping("data")
@@ -61,7 +68,21 @@ public class CustomerRestController {
 
     @GetMapping("comment")
     public Comment comment(@RequestParam(defaultValue = "1") String id) {
-        return iPlaceHolder.getComments(id);
+        CircuitBreaker breaker = circuitBreakerFactory.create("breaker1");
+        CircuitBreaker breaker1 = globalCustomConfiguration.create("breaker2");
+        return breaker.run(
+                () -> iPlaceHolder.getComments(id),
+                throwable -> fallBack(id)
+        );
+    }
+
+    private Comment fallBack(String id) {
+        Comment comment = new Comment();
+        comment.setId(0);
+        comment.setComment("Sample Comment");
+        comment.setPostId(1);
+        comment.setUserId(1);
+        return comment;
     }
 
 }
