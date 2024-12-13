@@ -1,6 +1,6 @@
 package com.works.configs;
 
-import io.micrometer.tracing.Tracer;
+import brave.Tracer;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -24,8 +24,8 @@ public class FilterConfig implements Filter {
         HttpServletRequest req = (HttpServletRequest) servletRequest;
         HttpServletResponse res = (HttpServletResponse) servletResponse;
 
-        String spanId = tracer.currentTraceContext().context().spanId();
-        String traceId = tracer.currentTraceContext().context().traceId();
+        String spanId = tracer.currentSpan().context().spanIdString();
+        String traceId = tracer.currentSpan().context().traceIdString();
 
         String url = req.getRequestURI();
         String sessionID = req.getSession().getId();
